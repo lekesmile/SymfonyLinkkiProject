@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LinkkiLista{% endblock %}
+
+  {% block body %}
+
+  <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="Linkki">ID</th>
+      <th scope="Otsikko">Linkki</th>
+      <th scope="Avainsana">Otsikko</th>
+      <th scope="Kuva">Avainsana</th>
+      <th scope="Toiminnot">Kuva</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  {% for linkki in linkit %}
+    <tr>
+      <th>{{ linkki.id}}</th>
+      <td>{{ linkki.linkki}}</td>
+      <td>{{ linkki.otsikko}}</td>
+      <td>{{ linkki.avainsana}}</td>
+      <td>{{ linkki.kuvaus}}</td>
+      <td>
+         <a href="#" class="btn btn-dark">Näytä</a>
+         <a href="#" class="btn btn-success">Muokka</a>
+         <button class="btn btn-danger">Poista</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+    </table>
+
+
+
+{% endblock %}
