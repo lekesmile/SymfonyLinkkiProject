@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Linkki;
+use App\Form\LinkkiFormType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,33 +31,104 @@ class LinkkiController extends AbstractController{
  * @Route("/linkki/uusi", name="linkki_uusi")
  */
 
-//  public function uusi(Request $request){
-//     return $this->render('linkki/uusi.html.twig');
-//  }
+ public function uusi(Request $request){
 
-//   /**
-//  * @Route("/linkki/{id}",name= "linkki_nayta")
-//  */
+    //Luodaan linkki -olio
+     $linkki = new Linkki();
 
-// public function nayta($id){
-//     return $this->render('linkki/nayta.html.twig');
-//  }
+     //Luodaan lomake
+$form = $this->createForm(
+    LinkkiFormType::class,
+    $linkki, [
+        'action' => $this->generateUrl('linkki_uusi'),
+        'attr' => ['class' => 'form-signin']
+    ]
+);
 
-//   /**
-//  * @Route("/linkki/muokkaa/{id}", name="linkki_muokkaa")
-//  */
+//käsitellään lomakkeelta tulleet tiedot
+$form->handleRequest($request);
+if($form->isSubmitted()){
+    // Talletetaan lomakettiedot muutujaan
+    $linkki = $form->getData();
 
-// public function muokkaa(Request $request, $id){
-//     return $this->render('linkki/muokkaa.html.twig');
-//  }
+    // Talletetaan tietokantaan
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->persist($linkki);
+    $entityManager->flush();
+}
 
-//   /**
-//  * @Route("/linkki/poista/{id}", name="linkki_poista")
-//  */
+    // Kutsutaan index-kontrolleria
+     return $this->render('linkki/uusi.html.twig', [
+         'form1' => $form->createView()
+     ]);
+ }
 
-// public function poista(Request $request, $id){
-//     return $this->render('linkki/poista.html.twig');
-//  }
+  /**
+ * @Route("/linkki/{id}", name= "linkki_nayta")
+ */
+
+public function nayta($id){
+    $linkki = $this->getDoctrine()->getRepository(Linkki::class)->find($id);
+
+    return $this->render('linkki/nayta.html.twig', [
+        'linkki' => $linkki,
+    ]);
+ }
+
+  /**
+ * @Route("/linkki/muokkaa/{id}", name="linkki_muokkaa")
+ */
+
+public function muokkaa(Request $request, $id){
+    $linkki = $this->getDoctrine()->getRepository(Linkki::class)->find($id);
+    
+
+ $form = $this->createForm(
+    LinkkiFormType::class,
+    $linkki, [
+        
+        'attr' => ['class' => 'form-signin']
+    ]
+);
+
+//käsitellään lomakkeelta tulleet tiedot
+$form->handleRequest($request);
+if($form->isSubmitted()){
+    // Talletetaan lomakettiedot muutujaan
+    $linkki = $form->getData();
+
+    // Talletetaan tietokantaan
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->flush();
+
+    // Kutsutaan index-kontroller
+    return $this->redirectToRoute('linkki_lista');
+}
+
+return $this->render('linkki/muokkaa.html.twig', [
+    'form1' => $form->createView(),
+]);
+
+}
+
+  /**
+ * @Route("/linkki/poista/{id}", name="linkki_poista")
+ */
+
+public function poista(Request $request, $id){
+
+    $linkki = $this->getDoctrine()->getRepository(Linkki::class)->find($id);
+   
+    //Poistetaan tietokannaasta
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($linkki);
+    $entityManager->flush();
+
+    // Kutsutaan index-kontroller
+    return $this->redirectToRoute('linkki_lista');
+
+    return $this->render('linkki/poista.html.twig');
+ }
  }
 
 

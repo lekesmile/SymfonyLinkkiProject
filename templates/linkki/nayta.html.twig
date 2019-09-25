@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nayta{% endblock %}
+
+  {% block body %}
+
+  <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Linkki</th>
+      <th scope="col">Otsikko</th>
+      <th scope="col">Avainsana</th>
+      <th scope="col">Kuvaus</th>
+      <th scope="col">Toiminnot</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>{{ linkki.id}}</th>
+      <td> <a href="{{linkki.linkki}}">{{ linkki.linkki}}</a></td>
+      <td>{{ linkki.otsikko}}</td>
+      <td>{{ linkki.avainsana}}</td>
+      <td>{{ linkki.kuvaus}}</td>
+      <td>
+        
+         <a href="#" class="btn btn-success">Muokka</a>
+         <button class="btn btn-danger">Poista</button>
+      </td>
+    </tr>
+
+  </tbody>
+    </table>
+
+
+
+{% endblock %}
